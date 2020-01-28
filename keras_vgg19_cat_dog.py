@@ -5,6 +5,8 @@ import keras
 from keras.preprocessing import image as image_utils
 from keras.applications.imagenet_utils import preprocess_input, decode_predictions
 
+import tensorflow as tf
+
 #####################
 # helper functions
 #####################
@@ -13,7 +15,9 @@ def image_preprocessor(image_path):
     image = image_utils.load_img(image_path, target_size=(224, 224))
     image = image_utils.img_to_array(image)
     image = np.expand_dims(image, axis=0)
-    image = preprocess_input(image)
+#     image = preprocess_input(image)
+    image = tf.keras.applications.vgg19.preprocess_input(image)
+#     print(image)
     return(image)
 
 #function to read in files housing all cat/dog breeds in imagenet labels
@@ -72,6 +76,8 @@ pred_df = pred_df.sort_values('score', ascending=False)
 #####################
 # print output
 #####################
+pd.set_option('display.max_columns', 100)
+pd.set_option('display.max_rows', 500)
 print(pred_df)
 
 #   class_description     score catdog                               file_name
